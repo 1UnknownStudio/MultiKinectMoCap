@@ -1,6 +1,5 @@
 #include "./OGLMatrix4f.h"
 
-
 OGLMatrix4f::OGLMatrix4f(void)
 {
     this->mMatrix4f[ 0] = 1;  
@@ -23,7 +22,6 @@ OGLMatrix4f::OGLMatrix4f(void)
     this->mMatrix4f[14] = 0; 
     this->mMatrix4f[15] = 1;
 }
-
 
 OGLMatrix4f::~OGLMatrix4f(void)
 {
@@ -61,7 +59,7 @@ void OGLMatrix4f::setLookAt(OGLVector3f &eyePos, OGLVector3f &lookAt, OGLVector3
 {
     OGLVector3f zAxis = (eyePos - lookAt).normalize(); 
     OGLVector3f xAxis = (upVector.cross(zAxis)).normalize();
-	OGLVector3f yAxis = (zAxis.cross(xAxis)).normalize();
+    OGLVector3f yAxis = (zAxis.cross(xAxis)).normalize();
     
     this->mMatrix4f[ 0] = xAxis.x;              
     this->mMatrix4f[ 1] = yAxis.x;              

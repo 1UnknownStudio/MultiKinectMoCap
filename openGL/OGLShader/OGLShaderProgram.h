@@ -41,4 +41,3 @@ class OGLShaderProgram
         void        setUniformValue     (std::string uName, float uValue);
         void        setUniformMatrix4   (std::string uName, float *uValue);
 };
-

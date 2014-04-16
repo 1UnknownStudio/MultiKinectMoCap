@@ -1,6 +1,5 @@
 #include "OGLShaderProgram.h"
 
-
 OGLShaderProgram::OGLShaderProgram(OGLShader *vs, OGLShader *fs)
 {
     this->mProgramHandler = glCreateProgram();
@@ -20,7 +19,6 @@ OGLShaderProgram::OGLShaderProgram(OGLShader *vs, OGLShader *fs)
     this->mIsLinked = this->mLinkProgram();
 }
 
-
 OGLShaderProgram::~OGLShaderProgram(void)
 {
     if(this->mVertexShader != NULL)
@@ -38,7 +36,6 @@ OGLShaderProgram::~OGLShaderProgram(void)
     this->mInfoLog.clear();
     glDeleteProgram(this->mProgramHandler);
 }
-
 
 bool OGLShaderProgram::mLinkProgram(void)
 {

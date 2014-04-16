@@ -14,25 +14,29 @@
 
 class CKinect
 {
-	private:
-		INuiSensor	*m_pNuiSensor;
-		HANDLE		 m_hNextSkeletonEvent;
-		int			 m_SensorID;
+    private:
+        INuiSensor    *m_pNuiSensor;
+        HANDLE         m_hNextSkeletonEvent;
 
-		OGLVector3f m_pJointsPosition[20];
-		OGLVector3f m_SkeletonPosition;
-		OGLVector3f m_SkeletonColor;
+        float         m_SkeletonAngle;
+        int             m_SensorID;
 
-		bool m_hasChanged;
-		bool initSkeleton(void);
+        OGLVector3f m_pJointsPosition[20];
+        OGLVector3f m_SkeletonPosition;
+        OGLVector3f m_SkeletonColor;
 
-	public:
-		CKinect(int, int, const OGLVector3f &);
-		~CKinect();
+        bool m_hasChanged;
+        bool initSkeleton(void);
 
-		void		 Update(void);
-		bool		 GetState(void);
-		OGLVector3f *getSkeletonColor(void);
-		OGLVector3f *getJointsPosition(void);
-		OGLVector3f *getSkeletonPosition(void);
+    public:
+        CKinect(int, int, const OGLVector3f &);
+        ~CKinect();
+
+        void        Update(void);
+        bool        GetState(void);
+        
+        float       *getAngle(void);
+        OGLVector3f *getSkeletonColor(void);
+        OGLVector3f *getJointsPosition(void);
+        OGLVector3f *getSkeletonPosition(void);
 };

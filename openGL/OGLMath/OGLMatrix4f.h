@@ -18,4 +18,3 @@ class OGLMatrix4f
         void    setFrustum      (float fovAngle, float aspectRatio, float zNear, float zFar); 
         void    setLookAt       (OGLVector3f &eyePos, OGLVector3f &lookAt, OGLVector3f &upVector);
 };
-

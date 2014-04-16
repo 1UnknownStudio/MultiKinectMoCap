@@ -19,27 +19,26 @@
 
 class OGLMain
 {
-	private:
-		HDC		mDeviceContext;
-		HGLRC	mRenderContext;
-		HWND	mWndInstance;
+    private:
+        HDC        mDeviceContext;
+        HGLRC    mRenderContext;
+        HWND    mWndInstance;
 
         OGLShaderProgram *mProgramShader;
-		CKinectManager *mKinectManager;
+        CKinectManager *mKinectManager;
         OGLTimer *mTimer;
 
-		OGLMatrix4f mFrustunMatrix;
-		OGLMatrix4f mLookAtMatrix;
+        OGLMatrix4f mFrustunMatrix;
+        OGLMatrix4f mLookAtMatrix;
 
         float mYaw;
         float mPitch;
 
-	public:
-		OGLMain			(const HWND &);
-		~OGLMain		(void);
+    public:
+        OGLMain            (const HWND &);
+        ~OGLMain        (void);
 
-		void render		(void);
-		void update		(void);
-		bool initialize	(void);
+        void render        (void);
+        void update        (void);
+        bool initialize    (void);
 };
-
