@@ -18,7 +18,7 @@ using namespace std;
 
 #include "./CKinect.h"
 
-#include "./../openGL/OGLMath/OGLVector3f.h"
+#include "./../openGL/OGLMath/OGLVector4f.h"
 #include "./../openGL/OGLDebugRender/OGLDebugRender.h"
 
 #define MAX_KINECT_SENSORS 4
@@ -32,12 +32,12 @@ class CKinectManager
         std::map<int, int>        m_FreeKinects;
         
         std::vector<float *>          m_pSkeletonAngles;
-        std::vector<OGLVector3f *>    m_pJointsPosition;
-        std::vector<OGLVector3f *>    m_pSkeletonsColor;
-        std::vector<OGLVector3f *>    m_pSkeletonsPosition;
+        std::vector<OGLVector4f *>    m_pJointsPosition;
+        std::vector<OGLVector4f *>    m_pSkeletonsColor;
+        std::vector<OGLVector4f *>    m_pSkeletonsPosition;
 
         std::vector<int> m_pJoinsDrawOrder;
-        OGLVector3f      m_JoinsInformation[20];
+        OGLVector4f      m_JoinsInformation[20];
 
         void addKinect(int);
         void releaseKinct();
@@ -46,6 +46,7 @@ class CKinectManager
         CKinectManager(void);
         ~CKinectManager();
 
+        void    BestPositionSkeletonPointAverage(void);
         void    ArithmeticAverageProcessSkeleton(void);
         void    BestPositionSkeletonPoint(void);
 

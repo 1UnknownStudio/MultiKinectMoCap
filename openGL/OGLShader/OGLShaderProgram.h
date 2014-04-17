@@ -35,9 +35,14 @@ class OGLShaderProgram
         OGLShader   *getVertexShader    (void);
         OGLShader   *getFragmentShader  (void);
 
+        int         getLocation         (std::string uName);
+
         void        activeProgram       (void);
         void        releseProgram       (void);
 
         void        setUniformValue     (std::string uName, float uValue);
-        void        setUniformMatrix4   (std::string uName, float *uValue);
+        void        setUniformVector4f  (std::string uName, float *uValue);
+
+        void        setUniformMatrix4   (std::string uName, bool transpose, float *uValue);
 };
+

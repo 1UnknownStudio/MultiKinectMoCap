@@ -9,7 +9,7 @@
 #include <NuiSkeleton.h>
 #include <NuiImageCamera.h>
 
-#include "./../openGL/OGLMath/OGLVector3f.h"
+#include "./../openGL/OGLMath/OGLVector4f.h"
 #include "./../openGL/OGLMath/OGLMatrix4f.h"
 
 class CKinect
@@ -21,22 +21,22 @@ class CKinect
         float         m_SkeletonAngle;
         int             m_SensorID;
 
-        OGLVector3f m_pJointsPosition[20];
-        OGLVector3f m_SkeletonPosition;
-        OGLVector3f m_SkeletonColor;
+        OGLVector4f m_pJointsPosition[20];
+        OGLVector4f m_SkeletonPosition;
+        OGLVector4f m_SkeletonColor;
 
         bool m_hasChanged;
         bool initSkeleton(void);
 
     public:
-        CKinect(int, int, const OGLVector3f &);
+        CKinect(int, int, const OGLVector4f &);
         ~CKinect();
 
         void        Update(void);
         bool        GetState(void);
         
         float       *getAngle(void);
-        OGLVector3f *getSkeletonColor(void);
-        OGLVector3f *getJointsPosition(void);
-        OGLVector3f *getSkeletonPosition(void);
+        OGLVector4f *getSkeletonColor(void);
+        OGLVector4f *getJointsPosition(void);
+        OGLVector4f *getSkeletonPosition(void);
 };

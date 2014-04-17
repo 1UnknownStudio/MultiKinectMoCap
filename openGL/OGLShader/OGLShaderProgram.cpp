@@ -1,5 +1,6 @@
 #include "OGLShaderProgram.h"
 
+
 OGLShaderProgram::OGLShaderProgram(OGLShader *vs, OGLShader *fs)
 {
     this->mProgramHandler = glCreateProgram();
@@ -19,6 +20,7 @@ OGLShaderProgram::OGLShaderProgram(OGLShader *vs, OGLShader *fs)
     this->mIsLinked = this->mLinkProgram();
 }
 
+
 OGLShaderProgram::~OGLShaderProgram(void)
 {
     if(this->mVertexShader != NULL)
@@ -36,6 +38,7 @@ OGLShaderProgram::~OGLShaderProgram(void)
     this->mInfoLog.clear();
     glDeleteProgram(this->mProgramHandler);
 }
+
 
 bool OGLShaderProgram::mLinkProgram(void)
 {
@@ -107,11 +110,25 @@ void OGLShaderProgram::setUniformValue(std::string uName, float uValue)
     }
 }
 
-void OGLShaderProgram::setUniformMatrix4(std::string uName, float *uValue)
+void OGLShaderProgram::setUniformVector4f(std::string uName, float *uValue)
 {
     int uLocation = glGetUniformLocation(this->mProgramHandler, uName.c_str());
     if(uLocation > -1)
     {
-        glUniformMatrix4fv(uLocation, 1, false, uValue);
+        glUniform4fv(uLocation, 1, uValue);
     }
+}
+
+void OGLShaderProgram::setUniformMatrix4(std::string uName, bool transpose, float *uValue)
+{
+    int uLocation = glGetUniformLocation(this->mProgramHandler, uName.c_str());
+    if(uLocation > -1)
+    {
+        glUniformMatrix4fv(uLocation, 1, transpose, uValue);
+    }
+}
+
+int OGLShaderProgram::getLocation(std::string uName)
+{
+    return(glGetUniformLocation(this->mProgramHandler, uName.c_str()));
 }

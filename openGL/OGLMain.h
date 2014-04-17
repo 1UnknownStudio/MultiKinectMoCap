@@ -9,7 +9,7 @@
 #include "./../kinect/CKinect.h"
 #include "./../kinect/CKinectManager.h"
 
-#include "./OGLMath/OGLVector3f.h"
+#include "./OGLMath/OGLVector4f.h"
 #include "./OGLMath/OGLMatrix4f.h"
 #include "./OGLDebugRender/OGLDebugRender.h"
 

@@ -1,6 +1,6 @@
 #include "./CKinect.h"
 
-CKinect::CKinect(int sId, int flags, const OGLVector3f &color)
+CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
 {
     this->m_SensorID = sId;
     this->m_hasChanged = true;
@@ -103,8 +103,8 @@ void CKinect::Update(void)
             this->m_SkeletonPosition.y = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.y;
             this->m_SkeletonPosition.z = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.z;
         }
-        OGLVector3f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
-        OGLVector3f v2(1.0f, 0.0f, 0.0f);
+        OGLVector4f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
+        OGLVector4f v2(1.0f, 0.0f, 0.0f);
 
         v2 = v2.normalize();
         v1 = v1.normalize();
@@ -114,18 +114,18 @@ void CKinect::Update(void)
     }
 }
 
-OGLVector3f *CKinect::getJointsPosition(void)
+OGLVector4f *CKinect::getJointsPosition(void)
 {
     
     return((this->m_hasChanged) ? this->m_pJointsPosition : NULL);
 }
 
-OGLVector3f *CKinect::getSkeletonPosition(void)
+OGLVector4f *CKinect::getSkeletonPosition(void)
 {
     return((this->m_hasChanged) ? &this->m_SkeletonPosition : NULL);
 }
 
-OGLVector3f *CKinect::getSkeletonColor(void)
+OGLVector4f *CKinect::getSkeletonColor(void)
 {
     return((this->m_hasChanged) ? &this->m_SkeletonColor : NULL );
 }

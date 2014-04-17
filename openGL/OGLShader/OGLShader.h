@@ -27,3 +27,4 @@ class OGLShader
         std::string      getError               (void);
         bool             isLoaded               (void);
 };
+

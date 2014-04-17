@@ -9,29 +9,29 @@ OGLDebugRender::~OGLDebugRender()
 {
 }
 
-void OGLDebugRender::drawAxis(OGLVector3f &start, float sz)
+void OGLDebugRender::drawAxis(OGLVector4f &start, float sz)
 {
-    this->drawLine(start, OGLVector3f(sz, 0.0f, 0.0f) + start, OGLVector3f(1.0, 0.0, 0.0));
-    this->drawLine(start, OGLVector3f(0.0f, sz, 0.0f) + start, OGLVector3f(0.0, 1.0, 0.0));
-    this->drawLine(start, OGLVector3f(0.0f, 0.0f, sz) + start, OGLVector3f(0.0, 0.0, 1.0));
+    this->drawLine(start, OGLVector4f(sz, 0.0f, 0.0f) + start, OGLVector4f(1.0, 0.0, 0.0));
+    this->drawLine(start, OGLVector4f(0.0f, sz, 0.0f) + start, OGLVector4f(0.0, 1.0, 0.0));
+    this->drawLine(start, OGLVector4f(0.0f, 0.0f, sz) + start, OGLVector4f(0.0, 0.0, 1.0));
 }
 
-void OGLDebugRender::drawGrid(int nLines, float sz, OGLVector3f &color)
+void OGLDebugRender::drawGrid(int nLines, float sz, OGLVector4f &color)
 {
     float hSz = sz / 2.0f;
 
     for(int i = 0; i <= nLines; i++)
     {
-        this->drawLine(OGLVector3f(-hSz + (i * sz) / nLines, 0.0f, -hSz), OGLVector3f(-hSz + (i * sz) / nLines, 0.0f, hSz), color);
+        this->drawLine(OGLVector4f(-hSz + (i * sz) / nLines, 0.0f, -hSz), OGLVector4f(-hSz + (i * sz) / nLines, 0.0f, hSz), color);
     }
 
     for(int i = 0; i <= nLines; i++)
     {
-        this->drawLine(OGLVector3f(-hSz, 0.0f, -hSz + (i * sz) / nLines), OGLVector3f(hSz, 0.0f, -hSz + (i * sz) / nLines), color);
+        this->drawLine(OGLVector4f(-hSz, 0.0f, -hSz + (i * sz) / nLines), OGLVector4f(hSz, 0.0f, -hSz + (i * sz) / nLines), color);
     }
 }
 
-void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector3f &color)
+void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector4f &color)
 {
     float pI = 3.14159265359f;
     float sSection = pI / nSections;
@@ -40,20 +40,20 @@ void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector3f &color
     {
         for(float theta = 0; theta < pI; theta += sSection)
         {
-            OGLVector3f startP(sRadius * std::sinf(phi) * std::cosf(theta),
+            OGLVector4f startP(sRadius * std::sinf(phi) * std::cosf(theta),
                                sRadius * std::cosf(phi),
                                sRadius * std::sinf(phi) * std::sinf(theta));
      
-            OGLVector3f endP(sRadius * std::sinf(phi) * std::cosf(theta + sSection),
+            OGLVector4f endP(sRadius * std::sinf(phi) * std::cosf(theta + sSection),
                              sRadius * std::cosf(phi),
                              sRadius * std::sinf(phi) * std::sinf(theta + sSection));
 
-            this->drawLine(startP, endP, OGLVector3f(1.0f, 1.0f, 1.0f));
+            this->drawLine(startP, endP, OGLVector4f(1.0f, 1.0f, 1.0f));
         }
     }
 }
 
-void OGLDebugRender::drawLine(OGLVector3f &start, OGLVector3f &end, OGLVector3f &color)
+void OGLDebugRender::drawLine(OGLVector4f &start, OGLVector4f &end, OGLVector4f &color)
 {
     float v[6] = {start.x, start.y, start.z, end.x, end.y, end.z};
     float c[6] = {color.x, color.y, color.z, color.x, color.y, color.z};
@@ -69,7 +69,7 @@ void OGLDebugRender::drawLine(OGLVector3f &start, OGLVector3f &end, OGLVector3f 
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void OGLDebugRender::drawPoint(OGLVector3f &vPoint, OGLVector3f &vColor, float sz)
+void OGLDebugRender::drawPoint(OGLVector4f &vPoint, OGLVector4f &vColor, float sz)
 {
     float v[3] = { vPoint.x, vPoint.y, vPoint.z };
     float c[3] = { vColor.x, vColor.y, vColor.z };

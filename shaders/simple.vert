@@ -1,8 +1,9 @@
-uniform mat4 sFrustum;
-uniform mat4 sLookAt;
+uniform mat4 projectionMatrix;
+uniform mat4 modelMatrix;
+uniform mat4 viewMatrix;
 
 void main()
 {
 	gl_FrontColor = gl_Color;
-	gl_Position = sFrustum * sLookAt * gl_Vertex;
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * gl_Vertex;
 }

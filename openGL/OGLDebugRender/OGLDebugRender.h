@@ -4,7 +4,7 @@
 #include <GL\gl.h>
 #include <cmath>
 
-#include "./../OGLMath/OGLVector3f.h"
+#include "./../OGLMath/OGLVector4f.h"
 
 class OGLDebugRender
 {
@@ -12,9 +12,9 @@ class OGLDebugRender
         OGLDebugRender        ();
         ~OGLDebugRender       ();
 
-        void    drawLine     (OGLVector3f &, OGLVector3f &, OGLVector3f &);
-        void    drawGrid     (int, float, OGLVector3f &);
-        void    drawSphere   (float, int, OGLVector3f &);
-        void    drawAxis     (OGLVector3f &, float);
-        void    drawPoint    (OGLVector3f &, OGLVector3f &, float);
+        void    drawLine     (OGLVector4f &, OGLVector4f &, OGLVector4f &);
+        void    drawGrid     (int, float, OGLVector4f &);
+        void    drawSphere   (float, int, OGLVector4f &);
+        void    drawAxis     (OGLVector4f &, float);
+        void    drawPoint    (OGLVector4f &, OGLVector4f &, float);
 };

@@ -29,7 +29,6 @@ OGLMain::~OGLMain(void)
     delete(this->mKinectManager);
     this->mKinectManager = NULL;
 
-
     delete(this->mTimer);
     this->mTimer = NULL;
 }
@@ -76,35 +75,42 @@ void OGLMain::update(void)
 {
     this->mTimer->update();
     this->mKinectManager->Update();
+
     this->mKinectManager->RefreshNumKinects();
-    this->mKinectManager->BestPositionSkeletonPoint();
+    //this->mKinectManager->BestPositionSkeletonPoint();
+    this->mKinectManager->BestPositionSkeletonPointAverage();
     //this->mKinectManager->ArithmeticAverageProcessSkeleton();
 
     float aspect = (float)(GetSystemMetrics(SM_CXSCREEN) / GetSystemMetrics(SM_CYSCREEN));
     aspect = (aspect < 1.0f) ? (float)(GetSystemMetrics(SM_CYSCREEN) / GetSystemMetrics(SM_CXSCREEN)) : aspect;
 
     this->mFrustunMatrix.setFrustum(90.0f, aspect, 0.1f, 1000.0f);
-    this->mLookAtMatrix.setLookAt(OGLVector3f(0.0f, 0.5f, -0.1f), OGLVector3f(0.0f, 0.0f, 1.0f), OGLVector3f(0.0f, 1.0f, 0.0f));
+    this->mLookAtMatrix.setLookAt(OGLVector4f(0.0f, 0.5f, -0.1f), OGLVector4f(0.0f, 0.0f, 1.0f), OGLVector4f(0.0f, 1.0f, 0.0f));
 }
 
 void OGLMain::render(void)
 {
+    static float a = 0.0f;
     glClearColor(0.0, 0.0, 0.0, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    this->mProgramShader->setUniformMatrix4("sFrustum", this->mFrustunMatrix.getMatrix());
-    this->mProgramShader->setUniformMatrix4("sLookAt", this->mLookAtMatrix.getMatrix());
+    OGLMatrix4f modelMatrix;
+    this->mProgramShader->activeProgram();
+
+    this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
+    this->mProgramShader->setUniformMatrix4("viewMatrix", false, this->mLookAtMatrix.m_pMatrix4f);
+    this->mProgramShader->setUniformMatrix4("modelMatrix", true, modelMatrix.m_pMatrix4f);
 
     OGLDebugRender dRender;
-    dRender.drawGrid(50, 50.0f, OGLVector3f(1.0f, 1.0f, 1.0f));
-    dRender.drawAxis(OGLVector3f(0.0f, 0.0f, 0.0f), 6.0f);
-    //this->mKinectManager->DrawAllSkeletons();
-    this->mKinectManager->Draw();
+    dRender.drawGrid(50, 50.0f, OGLVector4f(1.0f, 1.0f, 1.0f));
+    dRender.drawAxis(OGLVector4f(0.0f, 0.0f, 0.0f), 6.0f);
 
-    SwapBuffers(this->mDeviceContext);
+    this->mKinectManager->Draw();
+    this->mProgramShader->releseProgram();
 
     wchar_t buffer[80] = {0};
     swprintf_s(buffer, L"FPS: %d", this->mTimer->getFps());
 
+    SwapBuffers(this->mDeviceContext);
     SetWindowText(this->mWndInstance, buffer);
 }
