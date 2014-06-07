@@ -87,10 +87,7 @@ void OGLMain::update(void)
     this->mKeyboard.update();
 
     this->mKinectManager->Update();
-
     this->mKinectManager->RefreshNumKinects();
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     if (this->mKeyboard.isKeyPressed("1") && this->mTimer->endOfTime("1", 0.5)) this->mFun = 0;
     if (this->mKeyboard.isKeyPressed("2") && this->mTimer->endOfTime("2", 0.5)) this->mFun = 1;
@@ -102,54 +99,24 @@ void OGLMain::update(void)
     if (this->mFun == 0) this->mKinectManager->ArithmeticAverage();
     else if (this->mFun == 1) this->mKinectManager->BestPointAritmeticAverage();
     else this->mKinectManager->BestPointAritmeticAverageWeight();
-=======
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-    //this->mKinectManager->BestPositionSkeletonPoint();
-    this->mKinectManager->BestPositionSkeletonPointAverage();
-    //this->mKinectManager->ArithmeticAverageProcessSkeleton();
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     float aspect = (float)(GetSystemMetrics(SM_CXSCREEN) / GetSystemMetrics(SM_CYSCREEN));
     aspect = (aspect < 1.0f) ? (float)(GetSystemMetrics(SM_CYSCREEN) / GetSystemMetrics(SM_CXSCREEN)) : aspect;
 
     this->mFrustunMatrix.setFrustum(90.0f, aspect, 0.1f, 1000.0f);
-<<<<<<< HEAD
-<<<<<<< HEAD
     this->mLookAtMatrix.setLookAt(OGLVector4f(0.0f, 1.0f, -0.2f), OGLVector4f(0.0f, 0.0f, 1.0f), OGLVector4f(0.0f, 1.0f, 0.0f));
-=======
-    this->mLookAtMatrix.setLookAt(OGLVector4f(0.0f, 0.5f, -0.1f), OGLVector4f(0.0f, 0.0f, 1.0f), OGLVector4f(0.0f, 1.0f, 0.0f));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-    this->mLookAtMatrix.setLookAt(OGLVector4f(0.0f, 0.5f, -0.1f), OGLVector4f(0.0f, 0.0f, 1.0f), OGLVector4f(0.0f, 1.0f, 0.0f));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 }
 
 void OGLMain::render(void)
 {
     static float a = 0.0f;
-<<<<<<< HEAD
-<<<<<<< HEAD
     glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-=======
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-    glClearColor(0.0, 0.0, 0.0, 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    OGLMatrix4f modelMatrix;
-<<<<<<< HEAD
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
     this->mProgramShader->activeProgram();
 
     this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
     this->mProgramShader->setUniformMatrix4("viewMatrix", false, this->mLookAtMatrix.m_pMatrix4f);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     OGLDebugRender dRender;
     dRender.drawGrid(50, 50.0f, OGLVector4f(0.3f, 0.3f, 0.3f));
@@ -167,26 +134,6 @@ void OGLMain::render(void)
 
 	glWindowPos2i(0, 0);
 	glDrawPixels(320, 240, GL_BGRA, GL_BYTE, (char *)this->mKinectManager->getImage());
-=======
-    this->mProgramShader->setUniformMatrix4("modelMatrix", true, modelMatrix.m_pMatrix4f);
-
-    OGLDebugRender dRender;
-    dRender.drawGrid(50, 50.0f, OGLVector4f(1.0f, 1.0f, 1.0f));
-    dRender.drawAxis(OGLVector4f(0.0f, 0.0f, 0.0f), 6.0f);
-
-    this->mKinectManager->Draw();
-    this->mProgramShader->releseProgram();
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-    this->mProgramShader->setUniformMatrix4("modelMatrix", true, modelMatrix.m_pMatrix4f);
-
-    OGLDebugRender dRender;
-    dRender.drawGrid(50, 50.0f, OGLVector4f(1.0f, 1.0f, 1.0f));
-    dRender.drawAxis(OGLVector4f(0.0f, 0.0f, 0.0f), 6.0f);
-
-    this->mKinectManager->Draw();
-    this->mProgramShader->releseProgram();
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     wchar_t buffer[80] = {0};
     swprintf_s(buffer, L"FPS: %lf  FrameTime: %lfms", this->mTimer->getFps(), this->mTimer->getFrameTimeInMs());

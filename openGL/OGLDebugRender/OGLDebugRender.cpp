@@ -31,37 +31,6 @@ void OGLDebugRender::drawGrid(int nLines, float sz, OGLVector4f &color)
     }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector4f &color)
-{
-    float pI = 3.14159265359f;
-    float sSection = pI / nSections;
-
-    for(float phi = 0; phi < 2.0f * pI; phi += sSection)
-    {
-        for(float theta = 0; theta < pI; theta += sSection)
-        {
-            OGLVector4f startP(sRadius * std::sinf(phi) * std::cosf(theta),
-                               sRadius * std::cosf(phi),
-                               sRadius * std::sinf(phi) * std::sinf(theta));
-     
-            OGLVector4f endP(sRadius * std::sinf(phi) * std::cosf(theta + sSection),
-                             sRadius * std::cosf(phi),
-                             sRadius * std::sinf(phi) * std::sinf(theta + sSection));
-
-            this->drawLine(startP, endP, OGLVector4f(1.0f, 1.0f, 1.0f));
-        }
-    }
-}
-
-<<<<<<< HEAD
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 void OGLDebugRender::drawLine(OGLVector4f &start, OGLVector4f &end, OGLVector4f &color)
 {
     float v[6] = {start.x, start.y, start.z, end.x, end.y, end.z};

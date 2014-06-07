@@ -14,7 +14,7 @@ CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
     this->m_SkeletonColor.x = color.x;
     this->m_SkeletonColor.y = color.y;
     this->m_SkeletonColor.z = color.z;
-
+	
 	for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++) *f = 0.0f;
 
     if (FAILED(NuiCreateSensorByIndex(this->m_SensorID, &this->m_pNuiSensor)))
@@ -119,7 +119,7 @@ bool CKinect::Update(void)
 
 	if (lockedRect.Pitch != 0)
 	{
-		int *buffer = (int *)malloc(sizeof(int)* 640 * 480);
+		int *buffer =(int *)malloc(sizeof(int)* 640 * 480);
 		int *currentByte = (int *)lockedRect.pBits;
 		int *dataEnd = currentByte + 640 * 480;
 		int *b = buffer;
@@ -129,7 +129,7 @@ bool CKinect::Update(void)
 		for (int x = 0, i = 0, mi = 640 * 480; x < 640 * 480 / 2; x++, i++, mi--)
 		{
 			int t = *(buffer + i);
-			*(buffer + i) = *(buffer + mi);
+			*(buffer + i)  = *(buffer + mi);
 			*(buffer + mi) = t;
 		}
 		
@@ -137,7 +137,7 @@ bool CKinect::Update(void)
 		{
 			int pixel = cy * 320 + cx;
 			int nearestMatch = ((int)(cy / 0.5)) * 640 + (int)(cx / 0.5);
-			*(this->m_pImage + pixel) = *(buffer + nearestMatch);
+			*(his->m_pImage + pixel) = *(buffer + nearestMatch);
 		}
 		
 		free(buffer);
@@ -159,19 +159,7 @@ bool CKinect::Update(void)
         this->m_SkeletonPosition.y = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.y;
         this->m_SkeletonPosition.z = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.z;
 
-<<<<<<< HEAD
         NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[skeletonTrackedPos], boneOrientations);
-=======
-        if (skeletonTrackedPos < NUI_SKELETON_COUNT)
-        {
-            this->m_SkeletonPosition.x = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.x;
-            this->m_SkeletonPosition.y = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.y;
-            this->m_SkeletonPosition.z = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.z;
-        }
-        OGLVector4f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
-        OGLVector4f v2(1.0f, 0.0f, 0.0f);
-<<<<<<< HEAD
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
         OGLVector4f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
         OGLVector4f v2(1.0f, 0.0f, 0.0f);
@@ -181,9 +169,6 @@ bool CKinect::Update(void)
         v1.z = std::ceilf(v1.z * 100.0f + 0.5f) / 100.0f;
       
         v1.y = 0.0f;
-=======
-
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         v2 = v2.normalize();
         v1 = v1.normalize();
 
@@ -202,11 +187,7 @@ bool CKinect::Update(void)
         this->m_AngleID = (this->m_AngleID++) % MAX_ANGLES_HISOTRY;
 
         this->m_SkeletonAngle = 0.0f;
-        for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++)
-        {
-            this->m_SkeletonAngle += *f;
-        }
-
+        for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++)  this->m_SkeletonAngle += *f;
         this->m_SkeletonAngle = std::floorf(this->m_SkeletonAngle / MAX_ANGLES_HISOTRY);
 
         /*

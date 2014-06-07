@@ -26,16 +26,10 @@ class CKinect
         float         m_pSkeletonAngles[MAX_ANGLES_HISOTRY];
         float         m_SkeletonAngle;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 		int			  m_pImage[IMAGE_WIDTH * IMAGE_HEIGHT];
         int           m_SensorID;
         int           m_AngleID;
 
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         OGLVector4f m_pJointsPosition[20];
         OGLVector4f m_SkeletonPosition;
         OGLVector4f m_SkeletonColor;
@@ -53,13 +47,7 @@ class CKinect
 
 		int			*getImage(void);
         float       *getAngle(void);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         OGLVector4f *getSkeletonColor(void);
         OGLVector4f *getJointsPosition(void);
         OGLVector4f *getSkeletonPosition(void);

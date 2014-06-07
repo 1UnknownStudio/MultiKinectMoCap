@@ -18,15 +18,7 @@ CKinectManager::CKinectManager()
 
     for (int i = 0; i < this->m_NumSensors; ++i)
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
 		this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON | NUI_INITIALIZE_FLAG_USES_COLOR , OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
-=======
-        this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON, OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-        this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON, OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         this->m_FreeKinects.at(i) = 0;
     }
 
@@ -125,15 +117,7 @@ void CKinectManager::addKinect(int v_NumSensors)
     {
         if (this->m_FreeKinects.at(i) == 1)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
 			this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON, OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
-=======
-            this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON, OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-            this->m_Kinects.push_back(new CKinect(i, NUI_INITIALIZE_FLAG_USES_SKELETON, OGLVector4f((rand() % 10) / 10.0f, (rand() % 10) / 10.0f, (rand() % 10) / 10.0f)));
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
             this->m_FreeKinects.at(i) = 0;
             this->m_NumSensors++;
 
@@ -144,6 +128,7 @@ void CKinectManager::addKinect(int v_NumSensors)
 
 void CKinectManager::RefreshNumKinects()
 {
+
     int v_NumSensors = 0;
 
     if (FAILED(NuiGetSensorCount(&v_NumSensors)))
@@ -184,7 +169,6 @@ void CKinectManager::Update(void)
     
     for (std::vector<CKinect *>::iterator it = this->m_Kinects.begin(); it != this->m_Kinects.end(); it++)
     {
-<<<<<<< HEAD
         if ((*it)->Update())
         {
             this->m_pSkeletonsPosition.push_back((*it)->getSkeletonPosition());
@@ -192,19 +176,6 @@ void CKinectManager::Update(void)
             this->m_pSkeletonsColor.push_back((*it)->getSkeletonColor());
             this->m_pSkeletonAngles.push_back((*it)->getAngle());
         }
-=======
-        (*it)->Update();
-
-        OGLVector4f *skeletonColor = (*it)->getSkeletonColor();
-        OGLVector4f *skeletonJoins = (*it)->getJointsPosition();
-        OGLVector4f *skeletonPosition = (*it)->getSkeletonPosition();
-        float *skeletonAngle = (*it)->getAngle();
-
-        if (skeletonJoins != NULL) this->m_pJointsPosition.push_back(skeletonJoins);
-        if (skeletonColor != NULL) this->m_pSkeletonsColor.push_back(skeletonColor);
-        if (skeletonAngle != NULL) this->m_pSkeletonAngles.push_back(skeletonAngle);
-        if (skeletonPosition != NULL) this->m_pSkeletonsPosition.push_back(skeletonPosition);
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
     }
 }
 
@@ -244,57 +215,19 @@ void CKinectManager::ArithmeticAverage(void)
     }
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 void CKinectManager::BestPointAritmeticAverageWeight(void)
 {
     unsigned int index = 0;
     std::vector<OGLVector4f> joints;
     std::vector<std::vector<OGLVector4f>> skeletons;
-=======
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-void CKinectManager::BestPositionSkeletonPointAverage()
-{
-    int index = 0;
-    std::vector<OGLVector4f> joints;
-    std::vector<std::vector<OGLVector4f>> skeletons;
-<<<<<<< HEAD
-=======
-
-    for (unsigned int i = 1; i < this->m_pSkeletonAngles.size(); i++)
-    {
-        if (this->m_pSkeletonAngles[i] < this->m_pSkeletonAngles[i - 1]) index = i;
-    }
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-
-    for (unsigned int i = 1; i < this->m_pSkeletonAngles.size(); i++)
-    {
-<<<<<<< HEAD
-        if (this->m_pSkeletonAngles[i] < this->m_pSkeletonAngles[i - 1]) index = i;
-    }
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     std::vector<float> weight(this->m_pSkeletonAngles.size(), 0.0f);
     memset(this->m_JoinsInformation, 0, sizeof(OGLVector4f) * 20);
-=======
-        OGLVector4f aux;
-        aux.x = this->m_pSkeletonsPosition[i]->x - this->m_pSkeletonsPosition[index]->x;
-        aux.z = this->m_pSkeletonsPosition[i]->z - this->m_pSkeletonsPosition[index]->z;
-        aux.y = this->m_pSkeletonsPosition[i]->y - this->m_pSkeletonsPosition[index]->y;
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     for (unsigned int i = 1; i < weight.size() + 1; i++)
     {
-<<<<<<< HEAD
         weight[i - 1] = 1.0f / float(i);
     }
-=======
-        OGLVector4f aux;
-        aux.x = this->m_pSkeletonsPosition[i]->x - this->m_pSkeletonsPosition[index]->x;
-        aux.z = this->m_pSkeletonsPosition[i]->z - this->m_pSkeletonsPosition[index]->z;
-        aux.y = this->m_pSkeletonsPosition[i]->y - this->m_pSkeletonsPosition[index]->y;
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     OGLMatrix4f mtc, mt;
     for (unsigned int i = 0; i < this->m_pJointsPosition.size(); i++)
@@ -311,8 +244,6 @@ void CKinectManager::BestPositionSkeletonPointAverage()
         joints.clear();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     for (unsigned int i = 0; this->m_pSkeletonAngles.size() >= 2 && i < this->m_pSkeletonAngles.size() - 1; i++)
     {
         float a = *this->m_pSkeletonAngles[i];
@@ -351,9 +282,6 @@ void CKinectManager::BestPositionSkeletonPointAverage()
         }
     }
     */
-=======
-    memset(this->m_JoinsInformation, 0, sizeof(OGLVector4f)* 20);
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     for (unsigned int i = 0; i < this->m_pJointsPosition.size(); i++)
     {
@@ -389,9 +317,6 @@ void CKinectManager::BestPointAritmeticAverage(void)
             joints.push_back(mt * mtc * this->m_pJointsPosition[i][j]);
             this->m_pJointsPosition[i][j] = mt * mtc * this->m_pJointsPosition[i][j];
         }
-=======
-    memset(this->m_JoinsInformation, 0, sizeof(OGLVector4f)* 20);
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
         skeletons.push_back(joints);
         joints.clear();
@@ -419,40 +344,7 @@ void CKinectManager::BestPointAritmeticAverage(void)
     }
 }
 
-<<<<<<< HEAD
 int *CKinectManager::getImage(void)
 {
 	return(this->m_Kinects[0]->getImage());
-=======
-void CKinectManager::BestPositionSkeletonPoint()
-{
-    int index = 0;
-    memset(this->m_JoinsInformation, 0, sizeof(OGLVector4f)* 20);
-
-    for (unsigned int i = 1; i < this->m_pSkeletonAngles.size(); i++)
-    {
-        if (this->m_pSkeletonAngles[i] < this->m_pSkeletonAngles[i - 1]) index = i;
-    }
-
-    for (unsigned int i = 0; i < 20 && index < this->m_pJointsPosition.size(); i++)
-    {
-        this->m_JoinsInformation[i] = this->m_pJointsPosition[index][i];
-    }
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-}
-
-void CKinectManager::BestPositionSkeletonPoint()
-{
-    int index = 0;
-    memset(this->m_JoinsInformation, 0, sizeof(OGLVector4f)* 20);
-
-    for (unsigned int i = 1; i < this->m_pSkeletonAngles.size(); i++)
-    {
-        if (this->m_pSkeletonAngles[i] < this->m_pSkeletonAngles[i - 1]) index = i;
-    }
-
-    for (unsigned int i = 0; i < 20 && index < this->m_pJointsPosition.size(); i++)
-    {
-        this->m_JoinsInformation[i] = this->m_pJointsPosition[index][i];
-    }
 }

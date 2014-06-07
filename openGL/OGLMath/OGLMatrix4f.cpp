@@ -6,28 +6,6 @@ OGLMatrix4f::OGLMatrix4f(void)
     this->m_pMatrix4f[ 1] = 0;
     this->m_pMatrix4f[ 2] = 0;
     this->m_pMatrix4f[ 3] = 0;
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-    this->m_pMatrix4f[ 4] = 0;
-    this->m_pMatrix4f[ 5] = 1;
-    this->m_pMatrix4f[ 6] = 0;
-    this->m_pMatrix4f[ 7] = 0;
-
-    this->m_pMatrix4f[ 8] = 0;
-    this->m_pMatrix4f[ 9] = 0;
-    this->m_pMatrix4f[10] = 1;
-    this->m_pMatrix4f[11] = 0;
-
-    this->m_pMatrix4f[12] = 0;
-    this->m_pMatrix4f[13] = 0;
-    this->m_pMatrix4f[14] = 0;
-    this->m_pMatrix4f[15] = 1;
-}
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
     this->m_pMatrix4f[ 4] = 0;
     this->m_pMatrix4f[ 5] = 1;
@@ -45,8 +23,10 @@ OGLMatrix4f::OGLMatrix4f(void)
     this->m_pMatrix4f[15] = 1;
 }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+OGLMatrix4f::~OGLMatrix4f(void)
+{
+}
+
 OGLMatrix4f OGLMatrix4f::setIdentity(void)
 {
     this->m_pMatrix4f[ 0] = 1;
@@ -54,24 +34,6 @@ OGLMatrix4f OGLMatrix4f::setIdentity(void)
     this->m_pMatrix4f[ 2] = 0;
     this->m_pMatrix4f[ 3] = 0;
 
-=======
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-OGLMatrix4f::~OGLMatrix4f(void)
-{
-}
-
-void OGLMatrix4f::setIdentity(void)
-{
-    this->m_pMatrix4f[ 0] = 1;
-    this->m_pMatrix4f[ 1] = 0;
-    this->m_pMatrix4f[ 2] = 0;
-    this->m_pMatrix4f[ 3] = 0;
-
-<<<<<<< HEAD
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
     this->m_pMatrix4f[ 4] = 0;
     this->m_pMatrix4f[ 5] = 1;
     this->m_pMatrix4f[ 6] = 0;
@@ -86,23 +48,11 @@ void OGLMatrix4f::setIdentity(void)
     this->m_pMatrix4f[13] = 0;
     this->m_pMatrix4f[14] = 0;
     this->m_pMatrix4f[15] = 1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
 }
 
 OGLMatrix4f OGLMatrix4f::setLookAt(OGLVector4f &eyePos, OGLVector4f &lookAt, OGLVector4f &upVector)
-=======
-}
-
-void OGLMatrix4f::setLookAt(OGLVector4f &eyePos, OGLVector4f &lookAt, OGLVector4f &upVector)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-}
-
-void OGLMatrix4f::setLookAt(OGLVector4f &eyePos, OGLVector4f &lookAt, OGLVector4f &upVector)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 {
     OGLVector4f zAxis = (eyePos - lookAt).normalize();
     OGLVector4f xAxis = (upVector.cross(zAxis)).normalize();
@@ -127,14 +77,8 @@ void OGLMatrix4f::setLookAt(OGLVector4f &eyePos, OGLVector4f &lookAt, OGLVector4
     this->m_pMatrix4f[13] = -(yAxis.dot(eyePos));
     this->m_pMatrix4f[14] = -(zAxis.dot(eyePos));
     this->m_pMatrix4f[15] = 1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 }
 
 OGLMatrix4f OGLMatrix4f::setFrustum(float fovAngle, float aspectRatio, float zNear, float zFar)
@@ -166,23 +110,11 @@ OGLMatrix4f OGLMatrix4f::setFrustum(float fovAngle, float aspectRatio, float zNe
     this->m_pMatrix4f[13] =  0.0f;
     this->m_pMatrix4f[14] = -(2.0f * zFar * zNear / (zFar - zNear));
     this->m_pMatrix4f[15] =  0.0f;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
 }
 
 OGLMatrix4f OGLMatrix4f::setXRotation(float xAngle)
-=======
-}
-
-void OGLMatrix4f::setXRotation(float xAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-}
-
-void OGLMatrix4f::setXRotation(float xAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 {
     this->m_pMatrix4f[ 0] =  1;
     this->m_pMatrix4f[ 1] =  0;
@@ -203,23 +135,11 @@ void OGLMatrix4f::setXRotation(float xAngle)
     this->m_pMatrix4f[13] =  0;
     this->m_pMatrix4f[14] =  0;
     this->m_pMatrix4f[15] =  1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
 }
 
 OGLMatrix4f OGLMatrix4f::setYRotation(float yAngle)
-=======
-}
-
-void OGLMatrix4f::setYRotation(float yAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-}
-
-void OGLMatrix4f::setYRotation(float yAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 {
     this->m_pMatrix4f[ 0] =  std::cos(yAngle);
     this->m_pMatrix4f[ 1] =  0;
@@ -240,23 +160,11 @@ void OGLMatrix4f::setYRotation(float yAngle)
     this->m_pMatrix4f[13] =  0;
     this->m_pMatrix4f[14] =  0;
     this->m_pMatrix4f[15] =  1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
 }
 
 OGLMatrix4f OGLMatrix4f::setZRotation(float zAngle)
-=======
-}
-
-void OGLMatrix4f::setZRotation(float zAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-}
-
-void OGLMatrix4f::setZRotation(float zAngle)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 {
     this->m_pMatrix4f[ 0] =  std::cos(zAngle);
     this->m_pMatrix4f[ 1] = -std::sin(zAngle);
@@ -277,23 +185,11 @@ void OGLMatrix4f::setZRotation(float zAngle)
     this->m_pMatrix4f[13] =  0;
     this->m_pMatrix4f[14] =  0;
     this->m_pMatrix4f[15] =  1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
 }
 
 OGLMatrix4f OGLMatrix4f::setTranslation(float x, float y, float z)
-=======
-}
-
-void OGLMatrix4f::setTranslation(float x, float y, float z)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
-}
-
-void OGLMatrix4f::setTranslation(float x, float y, float z)
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 {
     this->m_pMatrix4f[ 0] = 1;
     this->m_pMatrix4f[ 1] = 0;
@@ -314,14 +210,8 @@ void OGLMatrix4f::setTranslation(float x, float y, float z)
     this->m_pMatrix4f[13] = 0;
     this->m_pMatrix4f[14] = 0;
     this->m_pMatrix4f[15] = 1;
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     return(*this);
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
-=======
->>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 }
 
 OGLMatrix4f OGLMatrix4f::operator * (const OGLMatrix4f &inputMatrix)
