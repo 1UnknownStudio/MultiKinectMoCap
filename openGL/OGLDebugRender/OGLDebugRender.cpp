@@ -31,6 +31,11 @@ void OGLDebugRender::drawGrid(int nLines, float sz, OGLVector4f &color)
     }
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector4f &color)
 {
     float pI = 3.14159265359f;
@@ -53,6 +58,10 @@ void OGLDebugRender::drawSphere(float sRadius, int nSections, OGLVector4f &color
     }
 }
 
+<<<<<<< HEAD
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
+=======
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 void OGLDebugRender::drawLine(OGLVector4f &start, OGLVector4f &end, OGLVector4f &color)
 {
     float v[6] = {start.x, start.y, start.z, end.x, end.y, end.z};

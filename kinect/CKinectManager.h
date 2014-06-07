@@ -46,9 +46,20 @@ class CKinectManager
         CKinectManager(void);
         ~CKinectManager();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+		int		*getImage(void);
+
+        void    ArithmeticAverage(void);
+        void    BestPointAritmeticAverage(void);
+        void    BestPointAritmeticAverageWeight(void);
+=======
+=======
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         void    BestPositionSkeletonPointAverage(void);
         void    ArithmeticAverageProcessSkeleton(void);
         void    BestPositionSkeletonPoint(void);
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
         void    RefreshNumKinects(void);
         void    DrawAllSkeletons(void);

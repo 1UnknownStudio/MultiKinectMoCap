@@ -2,46 +2,57 @@
 
 CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
 {
+    this->m_AngleID = 0;
     this->m_SensorID = sId;
     this->m_hasChanged = true;
     this->m_SkeletonAngle = 0.0f;
+	
+	this->m_SkeletonPosition.x = 0.0f;
+    this->m_SkeletonPosition.y = 0.0f;
+    this->m_SkeletonPosition.z = 0.0f;
 
     this->m_SkeletonColor.x = color.x;
     this->m_SkeletonColor.y = color.y;
     this->m_SkeletonColor.z = color.z;
 
+	for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++) *f = 0.0f;
+
     if (FAILED(NuiCreateSensorByIndex(this->m_SensorID, &this->m_pNuiSensor)))
     {
-        OutputDebugStringA("Error al crear el bind!\n");
+        MessageBox(NULL, L"Error al crear el bind!", L"Error", MB_ICONEXCLAMATION | MB_OK);
         exit(EXIT_FAILURE);
     }
 
     if (FAILED(this->m_pNuiSensor->NuiStatus()))
     {
-        OutputDebugStringA("Error al mirar el estado!\n");
+        MessageBox(NULL, L"Error al mirar el estado!", L"Error", MB_ICONEXCLAMATION | MB_OK);
         this->m_pNuiSensor->Release();
         exit(EXIT_FAILURE);
     }
 
     if (FAILED(this->m_pNuiSensor->NuiInitialize(flags)))
     {
-        OutputDebugStringA("Error al Inicializar los flags!\n");
+        MessageBox(NULL, L"Error al Inicializar los flags!", L"Error", MB_ICONEXCLAMATION | MB_OK);
+		this->m_pNuiSensor->NuiShutdown();
         this->m_pNuiSensor->Release();
         exit(EXIT_FAILURE);
     }
 
-    if ((flags & NUI_INITIALIZE_FLAG_USES_SKELETON) == NUI_INITIALIZE_FLAG_USES_SKELETON)
+	if ((flags & NUI_INITIALIZE_FLAG_USES_SKELETON) == NUI_INITIALIZE_FLAG_USES_SKELETON && !this->initSkeleton())
     {
-        if (!this->initSkeleton())
-        {
-            this->m_pNuiSensor->Release();
-            exit(EXIT_FAILURE);
-        }
+		MessageBox(NULL, L"Error al Inicializar el esqueleto!", L"Error", MB_ICONEXCLAMATION | MB_OK);
+		this->m_pNuiSensor->NuiShutdown();
+		this->m_pNuiSensor->Release();
+		exit(EXIT_FAILURE);
     }
 
-    this->m_SkeletonPosition.x = 0.0f;
-    this->m_SkeletonPosition.y = 0.0f;
-    this->m_SkeletonPosition.z = 0.0f;
+	if ((flags & NUI_INITIALIZE_FLAG_USES_COLOR) == NUI_INITIALIZE_FLAG_USES_COLOR && !this->initColor())
+	{
+		MessageBox(NULL, L"Error al Inicializar el color!", L"Error", MB_ICONEXCLAMATION | MB_OK);
+		this->m_pNuiSensor->NuiShutdown();
+		this->m_pNuiSensor->Release();
+		exit(EXIT_FAILURE);
+	}
 }
 
 CKinect::~CKinect()
@@ -71,22 +82,69 @@ bool CKinect::initSkeleton(void)
     return(true);
 }
 
-void CKinect::Update(void)
+bool CKinect::initColor(void)
 {
+	if (FAILED(this->m_pNuiSensor->NuiImageStreamOpen(NUI_IMAGE_TYPE_COLOR, NUI_IMAGE_RESOLUTION_640x480, 0, 2, NULL, &this->m_hRgbStream)))
+	{
+		OutputDebugStringA("Error en NuiImageStreamOpen!\n");
+		return(false);
+	}
+
+	return(true);
+}
+
+bool CKinect::Update(void)
+{
+    NUI_SKELETON_BONE_ORIENTATION boneOrientations[NUI_SKELETON_POSITION_COUNT];
     NUI_SKELETON_FRAME skeletonFrame;
     int skeletonTrackedPos = 0;
-    this->m_hasChanged = false;
 
     if (FAILED(this->m_pNuiSensor->NuiSkeletonGetNextFrame(1000, &skeletonFrame)))
     {
         OutputDebugStringA("Error al procesar el NuiSkeletonGetNextFrame!\n");
-        return;
+        return(false);
     }
 
     for (skeletonTrackedPos = 0; skeletonTrackedPos < NUI_SKELETON_COUNT; skeletonTrackedPos++)
     {
         if (skeletonFrame.SkeletonData[skeletonTrackedPos].eTrackingState == NUI_SKELETON_POSITION_TRACKED) break;
     }
+	
+	NUI_IMAGE_FRAME imageFrame;
+	NUI_LOCKED_RECT lockedRect;
+
+	this->m_pNuiSensor->NuiImageStreamGetNextFrame(this->m_hRgbStream, 9000, &imageFrame);
+	INuiFrameTexture *texture = imageFrame.pFrameTexture;
+	texture->LockRect(0, &lockedRect, NULL, 0);
+
+	if (lockedRect.Pitch != 0)
+	{
+		int *buffer = (int *)malloc(sizeof(int)* 640 * 480);
+		int *currentByte = (int *)lockedRect.pBits;
+		int *dataEnd = currentByte + 640 * 480;
+		int *b = buffer;
+
+		while (currentByte < dataEnd) *b++ = *currentByte++;
+
+		for (int x = 0, i = 0, mi = 640 * 480; x < 640 * 480 / 2; x++, i++, mi--)
+		{
+			int t = *(buffer + i);
+			*(buffer + i) = *(buffer + mi);
+			*(buffer + mi) = t;
+		}
+		
+		for (int cy = 0; cy < 240; cy++) for (int cx = 0; cx < 320; cx++)
+		{
+			int pixel = cy * 320 + cx;
+			int nearestMatch = ((int)(cy / 0.5)) * 640 + (int)(cx / 0.5);
+			*(this->m_pImage + pixel) = *(buffer + nearestMatch);
+		}
+		
+		free(buffer);
+	}
+
+	texture->UnlockRect(0);
+	this->m_pNuiSensor->NuiImageStreamReleaseFrame(this->m_hRgbStream, &imageFrame);
 
     if (skeletonTrackedPos < NUI_SKELETON_COUNT)
     {
@@ -96,7 +154,14 @@ void CKinect::Update(void)
             this->m_pJointsPosition[i].y = skeletonFrame.SkeletonData[skeletonTrackedPos].SkeletonPositions[i].y;
             this->m_pJointsPosition[i].z = skeletonFrame.SkeletonData[skeletonTrackedPos].SkeletonPositions[i].z;
         }
+        
+        this->m_SkeletonPosition.x = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.x;
+        this->m_SkeletonPosition.y = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.y;
+        this->m_SkeletonPosition.z = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.z;
 
+<<<<<<< HEAD
+        NuiSkeletonCalculateBoneOrientations(&skeletonFrame.SkeletonData[skeletonTrackedPos], boneOrientations);
+=======
         if (skeletonTrackedPos < NUI_SKELETON_COUNT)
         {
             this->m_SkeletonPosition.x = skeletonFrame.SkeletonData[skeletonTrackedPos].Position.x;
@@ -105,35 +170,88 @@ void CKinect::Update(void)
         }
         OGLVector4f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
         OGLVector4f v2(1.0f, 0.0f, 0.0f);
+<<<<<<< HEAD
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
 
+        OGLVector4f v1 = this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_RIGHT] - this->m_pJointsPosition[NUI_SKELETON_POSITION_SHOULDER_LEFT];
+        OGLVector4f v2(1.0f, 0.0f, 0.0f);
+
+        v1.x = std::ceilf(v1.x * 100.0f + 0.5f) / 100.0f;
+        v1.y = std::ceilf(v1.y * 100.0f + 0.5f) / 100.0f;
+        v1.z = std::ceilf(v1.z * 100.0f + 0.5f) / 100.0f;
+      
+        v1.y = 0.0f;
+=======
+
+>>>>>>> 091632ebba4714203c85ad21e75fdb02a07ca6f4
         v2 = v2.normalize();
         v1 = v1.normalize();
 
-        this->m_SkeletonAngle = std::acosf(v1.dot(v2) / (v1.length() * v2.length())) * 180.0f / 3.14159265;
-        this->m_hasChanged = true;
+        float aCos = v1.dot(v2);
+        float aSin = v1.cross(v2).length();
+
+        this->m_SkeletonAngle = std::acosf(aCos) * 180.0f / 3.14159265f;
+        //this->m_SkeletonAngle = std::atan2f(aSin, aCos) * 180.0f / 3.14159265f;
+
+        if (OGLVector4f(0.0f, 1.0f, 0.0f).dot(v1.cross(v2)) < 0)
+        {
+            this->m_SkeletonAngle = -this->m_SkeletonAngle;
+        }
+
+        *(this->m_pSkeletonAngles + this->m_AngleID) = this->m_SkeletonAngle;
+        this->m_AngleID = (this->m_AngleID++) % MAX_ANGLES_HISOTRY;
+
+        this->m_SkeletonAngle = 0.0f;
+        for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++)
+        {
+            this->m_SkeletonAngle += *f;
+        }
+
+        this->m_SkeletonAngle = std::floorf(this->m_SkeletonAngle / MAX_ANGLES_HISOTRY);
+
+        /*
+        float x = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.x;
+        float y = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.y;
+        float z = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.z;
+        float w = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.w;
+
+        float ro = atan2f(2.0f*(x*y + w*z), w*w + x*x - y*y - z*z);
+        float ya = atan2f(2.0f*(y*z + w*x), w*w - x*x - y*y + z*z);
+        float pp = asinf(-2.0f*(x*z - w*y));
+       */
+       
+        return(true);
     }
+
+    return(false);
 }
 
 OGLVector4f *CKinect::getJointsPosition(void)
 {
     
-    return((this->m_hasChanged) ? this->m_pJointsPosition : NULL);
+    return(this->m_pJointsPosition);
 }
 
 OGLVector4f *CKinect::getSkeletonPosition(void)
 {
-    return((this->m_hasChanged) ? &this->m_SkeletonPosition : NULL);
+    return(&this->m_SkeletonPosition);
 }
 
 OGLVector4f *CKinect::getSkeletonColor(void)
 {
-    return((this->m_hasChanged) ? &this->m_SkeletonColor : NULL );
+    return(&this->m_SkeletonColor);
+}
+
+int *CKinect::getImage(void)
+{
+	return(this->m_pImage);
 }
 
 float *CKinect::getAngle(void)
 {
-    return((this->m_hasChanged) ? &this->m_SkeletonAngle : NULL);
+    return(&this->m_SkeletonAngle);
 }
+
 bool CKinect::GetState()
 {
     return(this->m_pNuiSensor->NuiStatus() == S_OK);
