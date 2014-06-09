@@ -63,20 +63,17 @@ bool OGLMain::initialize(void)
     }
 
     glewInit();
+    glEnable(GL_SCISSOR_TEST);
     wglSwapIntervalEXT(false);
 
     this->mTimer = new OGLTimer(0);
     this->mKinectManager = new CKinectManager();
-
     this->mProgramShader = new OGLShaderProgram(new OGLShader("./simple.vert", GL_VERTEX_SHADER), new OGLShader("./simple.frag", GL_FRAGMENT_SHADER));
-    this->mProgramShader->activeProgram();
 
-    this->mKeyboard.addKey("1", 0x31);
-    this->mKeyboard.addKey("2", 0x32);
-    this->mKeyboard.addKey("3", 0x33);
+    this->mKeyboard.addKey("1", 0x31); this->mKeyboard.addKey("2", 0x32);
+    this->mKeyboard.addKey("3", 0x33); this->mKeyboard.addKey("4", 0x34);
 
-    this->mKeyboard.addKey("d", 0x44);
-    this->mKeyboard.addKey("f", 0x46);
+    this->mKeyboard.addKey("d", 0x44); this->mKeyboard.addKey("f", 0x46);
 
     return(oK);
 }
@@ -92,13 +89,12 @@ void OGLMain::update(void)
     if (this->mKeyboard.isKeyPressed("1") && this->mTimer->endOfTime("1", 0.5)) this->mFun = 0;
     if (this->mKeyboard.isKeyPressed("2") && this->mTimer->endOfTime("2", 0.5)) this->mFun = 1;
     if (this->mKeyboard.isKeyPressed("3") && this->mTimer->endOfTime("3", 0.5)) this->mFun = 2;
-
-    if (this->mKeyboard.isKeyPressed("f") && this->mTimer->endOfTime("f", 0.5)) this->mFun = (this->mFun + 1) % 3;
-    if (this->mKeyboard.isKeyPressed("d") && this->mTimer->endOfTime("d", 0.5)) this->mDrw = (this->mDrw + 1) % 2;
+    if (this->mKeyboard.isKeyPressed("4") && this->mTimer->endOfTime("4", 0.5)) this->mFun = 3;
 
     if (this->mFun == 0) this->mKinectManager->ArithmeticAverage();
     else if (this->mFun == 1) this->mKinectManager->BestPointAritmeticAverage();
-    else this->mKinectManager->BestPointAritmeticAverageWeight();
+    else if (this->mFun == 2) this->mKinectManager->BestPointAritmeticAverageWeight();
+    else this->mKinectManager->BestAngle();
 
     float aspect = (float)(GetSystemMetrics(SM_CXSCREEN) / GetSystemMetrics(SM_CYSCREEN));
     aspect = (aspect < 1.0f) ? (float)(GetSystemMetrics(SM_CYSCREEN) / GetSystemMetrics(SM_CXSCREEN)) : aspect;
@@ -109,31 +105,57 @@ void OGLMain::update(void)
 
 void OGLMain::render(void)
 {
-    static float a = 0.0f;
+    OGLDebugRender dRender;
+
+    glViewport(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+    glScissor(0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN));
+
     glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     this->mProgramShader->activeProgram();
-
-    this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
     this->mProgramShader->setUniformMatrix4("viewMatrix", false, this->mLookAtMatrix.m_pMatrix4f);
+    this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
 
-    OGLDebugRender dRender;
     dRender.drawGrid(50, 50.0f, OGLVector4f(0.3f, 0.3f, 0.3f));
-    //dRender.drawPoint(OGLVector4f(), OGLVector4f(1.0f, 0.0f, 0.0f), 10.0f);
-    //dRender.drawAxis(OGLVector4f(0.0f, 0.0f, 0.0f), 6.0f);
+    if (this->mFun == 0) dRender.drawPoint(OGLVector4f(0.0f, 0.0f, 0.0f), OGLVector4f(1.0f, 0.0f, 0.0f), 10.0f);
+    if (this->mFun == 1) dRender.drawPoint(OGLVector4f(0.0f, 0.0f, 0.0f), OGLVector4f(0.0f, 1.0f, 0.0f), 10.0f);
+    if (this->mFun == 2) dRender.drawPoint(OGLVector4f(0.0f, 0.0f, 0.0f), OGLVector4f(0.0f, 0.0f, 1.0f), 10.0f);
+    if (this->mFun == 3) dRender.drawPoint(OGLVector4f(0.0f, 0.0f, 0.0f), OGLVector4f(0.0f, 0.0f, 0.0f), 10.0f);
 
-    if (this->mDrw == 0) this->mKinectManager->Draw();
-    else this->mKinectManager->DrawAllSkeletons();
-
-    char s[255] = { 0 };
-    sprintf_s(s, "DrawCallNr: %d \t KinectCallNr %d\n", this->mDrw, this->mFun);
-    OutputDebugStringA(s);
-
+    this->mKinectManager->Draw();
     this->mProgramShader->releseProgram();
 
-	glWindowPos2i(0, 0);
-	glDrawPixels(320, 240, GL_BGRA, GL_BYTE, (char *)this->mKinectManager->getImage());
+    glWindowPos2i(0, 0);
+    glDrawPixels(320, 240, GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)this->mKinectManager->getImage());
+
+    glViewport(0, 240, 320, 240);
+    glScissor(0, 240, 320, 240);
+
+    glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->mProgramShader->activeProgram();
+    this->mProgramShader->setUniformMatrix4("viewMatrix", false, this->mLookAtMatrix.m_pMatrix4f);
+    this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
+
+    dRender.drawGrid(50, 50.0f, OGLVector4f(0.3f, 0.3f, 0.3f));
+    this->mKinectManager->DrawAllSkeletons();
+    this->mProgramShader->releseProgram();
+
+    glViewport(0, 480, 320, 240);
+    glScissor(0, 480, 320, 240);
+
+    glClearColor(0.1f, 0.1f, 0.1f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->mProgramShader->activeProgram();
+    this->mProgramShader->setUniformMatrix4("viewMatrix", false, this->mLookAtMatrix.m_pMatrix4f);
+    this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
+
+    dRender.drawGrid(50, 50.0f, OGLVector4f(0.3f, 0.3f, 0.3f));
+    this->mKinectManager->DrawSkeleton(0);
+    this->mProgramShader->releseProgram();
 
     wchar_t buffer[80] = {0};
     swprintf_s(buffer, L"FPS: %lf  FrameTime: %lfms", this->mTimer->getFps(), this->mTimer->getFrameTimeInMs());
