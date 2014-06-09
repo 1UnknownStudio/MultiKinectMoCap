@@ -46,14 +46,17 @@ class CKinectManager
         CKinectManager(void);
         ~CKinectManager();
 
-		int		*getImage(void);
+		int     *getImage(void);
+        void    toFile(void);
 
+        void    BestAngle(void);
         void    ArithmeticAverage(void);
         void    BestPointAritmeticAverage(void);
         void    BestPointAritmeticAverageWeight(void);
 
         void    RefreshNumKinects(void);
         void    DrawAllSkeletons(void);
+        void    DrawSkeleton(int);
 
         void    Draw(void);
         void    Update(void);

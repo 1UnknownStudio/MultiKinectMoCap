@@ -26,7 +26,7 @@ class CKinect
         float         m_pSkeletonAngles[MAX_ANGLES_HISOTRY];
         float         m_SkeletonAngle;
 
-		int			  m_pImage[IMAGE_WIDTH * IMAGE_HEIGHT];
+		int           m_pImage[IMAGE_WIDTH * IMAGE_HEIGHT];
         int           m_SensorID;
         int           m_AngleID;
 
@@ -45,7 +45,7 @@ class CKinect
         bool        Update(void);
         bool        GetState(void);
 
-		int			*getImage(void);
+		int	        *getImage(void);
         float       *getAngle(void);
 
         OGLVector4f *getSkeletonColor(void);

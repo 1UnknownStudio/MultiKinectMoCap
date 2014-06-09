@@ -105,6 +105,11 @@ bool CKinect::Update(void)
         return(false);
     }
 
+    NUI_TRANSFORM_SMOOTH_PARAMETERS somewhatLatentParams = { 0.5f, 0.1f, 0.5f, 0.1f, 0.1f };
+    NUI_TRANSFORM_SMOOTH_PARAMETERS verySmoothParams ={ 0.7f, 0.3f, 1.0f, 1.0f, 1.0f };
+    NUI_TRANSFORM_SMOOTH_PARAMETERS defaultParams = { 0.5f, 0.5f, 0.5f, 0.05f, 0.04f };
+    this->m_pNuiSensor->NuiTransformSmooth(&skeletonFrame, &defaultParams);
+
     for (skeletonTrackedPos = 0; skeletonTrackedPos < NUI_SKELETON_COUNT; skeletonTrackedPos++)
     {
         if (skeletonFrame.SkeletonData[skeletonTrackedPos].eTrackingState == NUI_SKELETON_POSITION_TRACKED) break;
@@ -119,29 +124,29 @@ bool CKinect::Update(void)
 
 	if (lockedRect.Pitch != 0)
 	{
-		int *buffer =(int *)malloc(sizeof(int)* 640 * 480);
-		int *currentByte = (int *)lockedRect.pBits;
-		int *dataEnd = currentByte + 640 * 480;
-		int *b = buffer;
+        unsigned int *buffer = (unsigned int *)malloc(sizeof(int)* 640 * 480);
+        unsigned int *currentByte = (unsigned int *)lockedRect.pBits;
+        unsigned int *dataEnd = currentByte + 640 * 480;
+        unsigned int *b = buffer;
 
 		while (currentByte < dataEnd) *b++ = *currentByte++;
-
-		for (int x = 0, i = 0, mi = 640 * 480; x < 640 * 480 / 2; x++, i++, mi--)
-		{
-			int t = *(buffer + i);
-			*(buffer + i)  = *(buffer + mi);
-			*(buffer + mi) = t;
-		}
-		
-		for (int cy = 0; cy < 240; cy++) for (int cx = 0; cx < 320; cx++)
-		{
-			int pixel = cy * 320 + cx;
-			int nearestMatch = ((int)(cy / 0.5)) * 640 + (int)(cx / 0.5);
-			*(his->m_pImage + pixel) = *(buffer + nearestMatch);
-		}
-		
-		free(buffer);
-	}
+        
+        for (unsigned int i = 0, mi = (640 * 480) - 1; i < 640 * 480 / 2; i++, mi--)
+        {
+            int t = *(buffer + i);
+            *(buffer + i)  = *(buffer + mi);
+            *(buffer + mi) = t;
+        }
+        
+        for (int cy = 0; cy < 240; cy++) for (int cx = 0; cx < 320; cx++)
+        {
+            int pixel = cy * 320 + cx;
+            int nearestMatch = ((int)(cy / 0.5)) * 640 + (int)(cx / 0.5);
+            *(this->m_pImage + pixel) = *(buffer + nearestMatch);
+        }
+        
+        free(buffer);
+    }
 
 	texture->UnlockRect(0);
 	this->m_pNuiSensor->NuiImageStreamReleaseFrame(this->m_hRgbStream, &imageFrame);
