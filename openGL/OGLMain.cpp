@@ -42,10 +42,10 @@ bool OGLMain::initialize(void)
     PIXELFORMATDESCRIPTOR pFormat;
 
     memset(&pFormat, 0, sizeof(PIXELFORMATDESCRIPTOR));
-    pFormat.dwFlags        = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pFormat.dwFlags       = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 
-    pFormat.nSize        = sizeof(PIXELFORMATDESCRIPTOR);
-    pFormat.nVersion    = 1;
+    pFormat.nSize         = sizeof(PIXELFORMATDESCRIPTOR);
+    pFormat.nVersion      = 1;
 
     pFormat.iPixelType    = LPD_TYPE_RGBA;
     pFormat.cColorBits    = 32;
@@ -127,7 +127,8 @@ void OGLMain::render(void)
     this->mProgramShader->releseProgram();
 
     glWindowPos2i(0, 0);
-    glDrawPixels(320, 240, GL_BGRA, GL_UNSIGNED_BYTE, (unsigned char *)this->mKinectManager->getImage());
+	unsigned char *img = (unsigned char *)this->mKinectManager->getImage();
+    if(img != NULL) glDrawPixels(320, 240, GL_BGRA, GL_UNSIGNED_BYTE, img);
 
     glViewport(0, 240, 320, 240);
     glScissor(0, 240, 320, 240);
@@ -154,7 +155,7 @@ void OGLMain::render(void)
     this->mProgramShader->setUniformMatrix4("projectionMatrix", false, this->mFrustunMatrix.m_pMatrix4f);
 
     dRender.drawGrid(50, 50.0f, OGLVector4f(0.3f, 0.3f, 0.3f));
-    this->mKinectManager->DrawSkeleton(0);
+    this->mKinectManager->DrawSkeleton();
     this->mProgramShader->releseProgram();
 
     wchar_t buffer[80] = {0};

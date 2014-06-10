@@ -41,7 +41,7 @@ void OGLDebugRender::drawLine(OGLVector4f &start, OGLVector4f &end, OGLVector4f 
     
     glVertexPointer(3, GL_FLOAT, 0, v);
     glColorPointer(3, GL_FLOAT, 0, c);
-    glDrawArrays(GL_LINES, 0, 6);
+    glDrawArrays(GL_LINES, 0, 2);
     
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -58,7 +58,7 @@ void OGLDebugRender::drawPoint(OGLVector4f &vPoint, OGLVector4f &vColor, float s
     glPointSize(sz);
     glVertexPointer(3, GL_FLOAT, 0, v);
     glColorPointer(3, GL_FLOAT, 0, c);
-    glDrawArrays(GL_POINTS, 0, 3);
+    glDrawArrays(GL_POINTS, 0, 1);
     glPointSize(1.0);
 
     glDisableClientState(GL_COLOR_ARRAY);

@@ -27,7 +27,7 @@ class CKinectManager
 {
     private:
         int     m_NumSensors;
-
+        int     m_KBase;
         std::vector<CKinect *>    m_Kinects;
         std::map<int, int>        m_FreeKinects;
         
@@ -56,7 +56,7 @@ class CKinectManager
 
         void    RefreshNumKinects(void);
         void    DrawAllSkeletons(void);
-        void    DrawSkeleton(int);
+        void    DrawSkeleton(void);
 
         void    Draw(void);
         void    Update(void);

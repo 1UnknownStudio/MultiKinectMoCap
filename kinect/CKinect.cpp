@@ -1,4 +1,4 @@
-#include "./CKinect.h"
+ #include "./CKinect.h"
 
 CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
 {
@@ -188,13 +188,12 @@ bool CKinect::Update(void)
             this->m_SkeletonAngle = -this->m_SkeletonAngle;
         }
 
-        *(this->m_pSkeletonAngles + this->m_AngleID) = this->m_SkeletonAngle;
+        *(this->m_pSkeletonAngles + this->m_AngleID) = std::floorf(this->m_SkeletonAngle);
         this->m_AngleID = (this->m_AngleID++) % MAX_ANGLES_HISOTRY;
 
         this->m_SkeletonAngle = 0.0f;
         for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++)  this->m_SkeletonAngle += *f;
         this->m_SkeletonAngle = std::floorf(this->m_SkeletonAngle / MAX_ANGLES_HISOTRY);
-
         /*
         float x = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.x;
         float y = boneOrientations[NUI_SKELETON_POSITION_HIP_CENTER].hierarchicalRotation.rotationQuaternion.y;
@@ -204,8 +203,7 @@ bool CKinect::Update(void)
         float ro = atan2f(2.0f*(x*y + w*z), w*w + x*x - y*y - z*z);
         float ya = atan2f(2.0f*(y*z + w*x), w*w - x*x - y*y + z*z);
         float pp = asinf(-2.0f*(x*z - w*y));
-       */
-       
+        */
         return(true);
     }
 

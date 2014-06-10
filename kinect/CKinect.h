@@ -12,7 +12,7 @@
 #include "./../openGL/OGLMath/OGLVector4f.h"
 #include "./../openGL/OGLMath/OGLMatrix4f.h"
 
-#define MAX_ANGLES_HISOTRY  5
+#define MAX_ANGLES_HISOTRY  10
 #define IMAGE_HEIGHT 480
 #define IMAGE_WIDTH	640
 
