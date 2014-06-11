@@ -1,6 +1,5 @@
 #include "OGLShaderProgram.h"
 
-
 OGLShaderProgram::OGLShaderProgram(OGLShader *vs, OGLShader *fs)
 {
     this->mProgramHandler = glCreateProgram();

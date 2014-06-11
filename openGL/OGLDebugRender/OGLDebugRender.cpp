@@ -1,11 +1,11 @@
 #include "./OGLDebugRender.h"
 #include <vector>
 
-OGLDebugRender::OGLDebugRender()
+OGLDebugRender::OGLDebugRender(void)
 {
 }
 
-OGLDebugRender::~OGLDebugRender()
+OGLDebugRender::~OGLDebugRender(void)
 {
 }
 

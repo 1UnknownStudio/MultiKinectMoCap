@@ -9,10 +9,10 @@
 
 class OGLTimer
 {
-	private:
-		LARGE_INTEGER m_timeFreq;
-		LARGE_INTEGER m_lastTime;
-		LARGE_INTEGER m_actualTime;
+    private:
+        LARGE_INTEGER m_timeFreq;
+        LARGE_INTEGER m_lastTime;
+        LARGE_INTEGER m_actualTime;
 
         double m_gameFps;
         double m_gameTime;
@@ -30,15 +30,15 @@ class OGLTimer
         void updateTimer        (void);
         void updateObjectTimer  (void);
 
-	public:
-		OGLTimer				(unsigned int fpsControl);
-		~OGLTimer				();
+    public:
+        OGLTimer                    (unsigned int fpsControl);
+        ~OGLTimer                   (void);
 
-		void	update			(void);
+        void    update              (void);
         
         double  getFps              (void);
         double  getSpeedFactor      (void);
-        double	getFrameTimeInMs	(void);
+        double  getFrameTimeInMs    (void);
 
-        bool    endOfTime       (const std::string &object, double ms);
+        bool    endOfTime           (const std::string &object, double ms);
 };

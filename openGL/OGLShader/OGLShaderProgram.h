@@ -24,8 +24,8 @@ class OGLShaderProgram
         bool mLinkProgram (void);
 
     public:
-        OGLShaderProgram        (OGLShader *vs, OGLShader *fs);
-        ~OGLShaderProgram       (void);
+        OGLShaderProgram                (OGLShader *vs, OGLShader *fs);
+        ~OGLShaderProgram               (void);
 
         unsigned int getProgramHandler  (void);
 

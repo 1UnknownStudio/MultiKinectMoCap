@@ -127,7 +127,7 @@ void OGLMain::render(void)
     this->mProgramShader->releseProgram();
 
     glWindowPos2i(0, 0);
-	unsigned char *img = (unsigned char *)this->mKinectManager->getImage();
+    unsigned char *img = (unsigned char *)this->mKinectManager->getImage();
     if(img != NULL) glDrawPixels(320, 240, GL_BGRA, GL_UNSIGNED_BYTE, img);
 
     glViewport(0, 240, 320, 240);

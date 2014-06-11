@@ -26,38 +26,42 @@ using namespace std;
 class CKinectManager
 {
     private:
-        int     m_NumSensors;
-        int     m_KBase;
-        std::vector<CKinect *>    m_Kinects;
-        std::map<int, int>        m_FreeKinects;
+        int                           m_NumSensors;
+        int                           m_KBase;
+
+        std::vector<CKinect *>        m_Kinects;
+        std::map<int, int>            m_FreeKinects;
         
         std::vector<float *>          m_pSkeletonAngles;
         std::vector<OGLVector4f *>    m_pJointsPosition;
         std::vector<OGLVector4f *>    m_pSkeletonsColor;
         std::vector<OGLVector4f *>    m_pSkeletonsPosition;
 
-        std::vector<int> m_pJoinsDrawOrder;
-        OGLVector4f      m_JoinsInformation[20];
+        std::vector<int>              m_pJoinsDrawOrder;
+        OGLVector4f                   m_JoinsInformation[20];
 
-        void addKinect(int);
-        void releaseKinct();
+        void addKinect           (int);
+        void releaseKinct        (void);
+
+        void translateAndRotate (void);
+        void order              (void);
         
     public:
-        CKinectManager(void);
-        ~CKinectManager();
+        CKinectManager                          (void);
+        ~CKinectManager                         (void);
 
-		int     *getImage(void);
-        void    toFile(void);
+        int     *getImage                       (void);
+        void    toFile                          (void);
 
-        void    BestAngle(void);
-        void    ArithmeticAverage(void);
-        void    BestPointAritmeticAverage(void);
-        void    BestPointAritmeticAverageWeight(void);
+        void    BestAngle                       (void);
+        void    ArithmeticAverage               (void);
+        void    BestPointAritmeticAverage       (void);
+        void    BestPointAritmeticAverageWeight (void);
 
-        void    RefreshNumKinects(void);
-        void    DrawAllSkeletons(void);
-        void    DrawSkeleton(void);
+        void    RefreshNumKinects               (void);
+        void    DrawAllSkeletons                (void);
+        void    DrawSkeleton                    (void);
 
-        void    Draw(void);
-        void    Update(void);
+        void    Draw                            (void);
+        void    Update                          (void);
 };

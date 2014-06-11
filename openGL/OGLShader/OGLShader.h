@@ -18,8 +18,8 @@ class OGLShader
         bool mLoadShader (void);
 
     public:
-        OGLShader        (char *shaderPath, unsigned int shaderType);
-        ~OGLShader       (void);
+        OGLShader                               (char *shaderPath, unsigned int shaderType);
+        ~OGLShader                              (void);
 
         unsigned int     getShaderHandler       (void);
         unsigned int     getShaderType          (void); 

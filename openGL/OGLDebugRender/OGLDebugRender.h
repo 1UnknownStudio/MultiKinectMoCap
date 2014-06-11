@@ -9,8 +9,8 @@
 class OGLDebugRender
 {
     public:
-        OGLDebugRender        ();
-        ~OGLDebugRender       ();
+        OGLDebugRender        (void);
+        ~OGLDebugRender       (void);
 
         void    drawLine     (OGLVector4f &, OGLVector4f &, OGLVector4f &);
         void    drawGrid     (int, float, OGLVector4f &);

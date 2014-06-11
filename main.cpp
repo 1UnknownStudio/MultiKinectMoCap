@@ -25,21 +25,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT hMsg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hActualInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow)
 {
-    WNDCLASSEX	wndCls;		memset(&wndCls, 0, sizeof(WNDCLASSEX));
-    HWND		hWnd;		memset(&hWnd, 0, sizeof(HWND));
-    MSG			hMsg;		memset(&hMsg, 0, sizeof(MSG));
+    WNDCLASSEX  wndCls;      memset(&wndCls, 0, sizeof(WNDCLASSEX));
+    HWND        hWnd;        memset(&hWnd, 0, sizeof(HWND));
+    MSG         hMsg;        memset(&hMsg, 0, sizeof(MSG));
 
-    wndCls.cbSize = sizeof(WNDCLASSEX);
+    wndCls.cbSize     = sizeof(WNDCLASSEX);
     wndCls.cbClsExtra = 0;
     wndCls.cbWndExtra = 0;
 
     wndCls.hInstance = hActualInst;
-    wndCls.hCursor = LoadCursor(NULL, IDC_ARROW);
-    wndCls.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
-    wndCls.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wndCls.hCursor   = LoadCursor(NULL, IDC_ARROW);
+    wndCls.hIconSm   = LoadIcon(NULL, IDI_APPLICATION);
+    wndCls.hIcon     = LoadIcon(NULL, IDI_APPLICATION);
 
-    wndCls.lpfnWndProc = WndProc;
-    wndCls.lpszMenuName = NULL;
+    wndCls.lpfnWndProc   = WndProc;
+    wndCls.lpszMenuName  = NULL;
     wndCls.lpszClassName = L"D3D";
 
     wndCls.style = 0;
@@ -52,8 +52,8 @@ int WINAPI WinMain(HINSTANCE hActualInst, HINSTANCE hPrevInst, LPSTR cmdLine, in
     }
 
     hWnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"D3D", L"Kinect Motion Capture", WS_OVERLAPPEDWINDOW, 0, 0,
-        GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN),
-        NULL, NULL, hActualInst, NULL);
+                          GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN),
+                          NULL, NULL, hActualInst, NULL);
 
     if (hWnd == NULL)
     {

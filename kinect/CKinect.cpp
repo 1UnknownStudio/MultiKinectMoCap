@@ -6,16 +6,16 @@ CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
     this->m_SensorID = sId;
     this->m_hasChanged = true;
     this->m_SkeletonAngle = 0.0f;
-	
-	this->m_SkeletonPosition.x = 0.0f;
+    
+    this->m_SkeletonPosition.x = 0.0f;
     this->m_SkeletonPosition.y = 0.0f;
     this->m_SkeletonPosition.z = 0.0f;
 
     this->m_SkeletonColor.x = color.x;
     this->m_SkeletonColor.y = color.y;
     this->m_SkeletonColor.z = color.z;
-	
-	for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++) *f = 0.0f;
+    
+    for (float *f = this->m_pSkeletonAngles; f < this->m_pSkeletonAngles + MAX_ANGLES_HISOTRY; f++) *f = 0.0f;
 
     if (FAILED(NuiCreateSensorByIndex(this->m_SensorID, &this->m_pNuiSensor)))
     {
@@ -33,29 +33,29 @@ CKinect::CKinect(int sId, int flags, const OGLVector4f &color)
     if (FAILED(this->m_pNuiSensor->NuiInitialize(flags)))
     {
         MessageBox(NULL, L"Error al Inicializar los flags!", L"Error", MB_ICONEXCLAMATION | MB_OK);
-		this->m_pNuiSensor->NuiShutdown();
+        this->m_pNuiSensor->NuiShutdown();
         this->m_pNuiSensor->Release();
         exit(EXIT_FAILURE);
     }
 
-	if ((flags & NUI_INITIALIZE_FLAG_USES_SKELETON) == NUI_INITIALIZE_FLAG_USES_SKELETON && !this->initSkeleton())
+    if ((flags & NUI_INITIALIZE_FLAG_USES_SKELETON) == NUI_INITIALIZE_FLAG_USES_SKELETON && !this->initSkeleton())
     {
-		MessageBox(NULL, L"Error al Inicializar el esqueleto!", L"Error", MB_ICONEXCLAMATION | MB_OK);
-		this->m_pNuiSensor->NuiShutdown();
-		this->m_pNuiSensor->Release();
-		exit(EXIT_FAILURE);
+        MessageBox(NULL, L"Error al Inicializar el esqueleto!", L"Error", MB_ICONEXCLAMATION | MB_OK);
+        this->m_pNuiSensor->NuiShutdown();
+        this->m_pNuiSensor->Release();
+        exit(EXIT_FAILURE);
     }
 
-	if ((flags & NUI_INITIALIZE_FLAG_USES_COLOR) == NUI_INITIALIZE_FLAG_USES_COLOR && !this->initColor())
-	{
-		MessageBox(NULL, L"Error al Inicializar el color!", L"Error", MB_ICONEXCLAMATION | MB_OK);
-		this->m_pNuiSensor->NuiShutdown();
-		this->m_pNuiSensor->Release();
-		exit(EXIT_FAILURE);
-	}
+    if ((flags & NUI_INITIALIZE_FLAG_USES_COLOR) == NUI_INITIALIZE_FLAG_USES_COLOR && !this->initColor())
+    {
+        MessageBox(NULL, L"Error al Inicializar el color!", L"Error", MB_ICONEXCLAMATION | MB_OK);
+        this->m_pNuiSensor->NuiShutdown();
+        this->m_pNuiSensor->Release();
+        exit(EXIT_FAILURE);
+    }
 }
 
-CKinect::~CKinect()
+CKinect::~CKinect(void)
 {
     if (this->m_pNuiSensor != NULL)
     {
@@ -84,13 +84,13 @@ bool CKinect::initSkeleton(void)
 
 bool CKinect::initColor(void)
 {
-	if (FAILED(this->m_pNuiSensor->NuiImageStreamOpen(NUI_IMAGE_TYPE_COLOR, NUI_IMAGE_RESOLUTION_640x480, 0, 2, NULL, &this->m_hRgbStream)))
-	{
-		OutputDebugStringA("Error en NuiImageStreamOpen!\n");
-		return(false);
-	}
+    if (FAILED(this->m_pNuiSensor->NuiImageStreamOpen(NUI_IMAGE_TYPE_COLOR, NUI_IMAGE_RESOLUTION_640x480, 0, 2, NULL, &this->m_hRgbStream)))
+    {
+        OutputDebugStringA("Error en NuiImageStreamOpen!\n");
+        return(false);
+    }
 
-	return(true);
+    return(true);
 }
 
 bool CKinect::Update(void)
@@ -114,42 +114,42 @@ bool CKinect::Update(void)
     {
         if (skeletonFrame.SkeletonData[skeletonTrackedPos].eTrackingState == NUI_SKELETON_POSITION_TRACKED) break;
     }
-	
-	NUI_IMAGE_FRAME imageFrame;
-	NUI_LOCKED_RECT lockedRect;
+    
+    NUI_IMAGE_FRAME imageFrame;
+    NUI_LOCKED_RECT lockedRect;
 
-	this->m_pNuiSensor->NuiImageStreamGetNextFrame(this->m_hRgbStream, 9000, &imageFrame);
-	INuiFrameTexture *texture = imageFrame.pFrameTexture;
-	texture->LockRect(0, &lockedRect, NULL, 0);
+    this->m_pNuiSensor->NuiImageStreamGetNextFrame(this->m_hRgbStream, 9000, &imageFrame);
+    INuiFrameTexture *texture = imageFrame.pFrameTexture;
+    texture->LockRect(0, &lockedRect, NULL, 0);
 
-	if (lockedRect.Pitch != 0)
-	{
-        unsigned int *buffer = (unsigned int *)malloc(sizeof(int)* 640 * 480);
+    if (lockedRect.Pitch != 0)
+    {
+        unsigned int *buffer = (unsigned int *)malloc(sizeof(int) * IMAGE_WIDTH * IMAGE_HEIGHT);
         unsigned int *currentByte = (unsigned int *)lockedRect.pBits;
-        unsigned int *dataEnd = currentByte + 640 * 480;
+        unsigned int *dataEnd = currentByte + IMAGE_WIDTH * IMAGE_HEIGHT;
         unsigned int *b = buffer;
 
-		while (currentByte < dataEnd) *b++ = *currentByte++;
+        while (currentByte < dataEnd) *b++ = *currentByte++;
         
-        for (unsigned int i = 0, mi = (640 * 480) - 1; i < 640 * 480 / 2; i++, mi--)
+        for (unsigned int i = 0, mi = (IMAGE_WIDTH * IMAGE_HEIGHT) - 1; i < IMAGE_WIDTH * IMAGE_HEIGHT / 2; i++, mi--)
         {
             int t = *(buffer + i);
             *(buffer + i)  = *(buffer + mi);
             *(buffer + mi) = t;
         }
         
-        for (int cy = 0; cy < 240; cy++) for (int cx = 0; cx < 320; cx++)
+        for (int cy = 0; cy < IMAGE_NHEIGHT; cy++) for (int cx = 0; cx < IMAGE_NWIDTH; cx++)
         {
-            int pixel = cy * 320 + cx;
-            int nearestMatch = ((int)(cy / 0.5)) * 640 + (int)(cx / 0.5);
+            int pixel = cy * IMAGE_NWIDTH + cx;
+            int nearestMatch = ((int)(cy / 0.5)) * IMAGE_WIDTH + (int)(cx / 0.5);
             *(this->m_pImage + pixel) = *(buffer + nearestMatch);
         }
         
         free(buffer);
     }
 
-	texture->UnlockRect(0);
-	this->m_pNuiSensor->NuiImageStreamReleaseFrame(this->m_hRgbStream, &imageFrame);
+    texture->UnlockRect(0);
+    this->m_pNuiSensor->NuiImageStreamReleaseFrame(this->m_hRgbStream, &imageFrame);
 
     if (skeletonTrackedPos < NUI_SKELETON_COUNT)
     {
@@ -183,11 +183,7 @@ bool CKinect::Update(void)
         this->m_SkeletonAngle = std::acosf(aCos) * 180.0f / 3.14159265f;
         //this->m_SkeletonAngle = std::atan2f(aSin, aCos) * 180.0f / 3.14159265f;
 
-        if (OGLVector4f(0.0f, 1.0f, 0.0f).dot(v1.cross(v2)) < 0)
-        {
-            this->m_SkeletonAngle = -this->m_SkeletonAngle;
-        }
-
+        if (OGLVector4f(0.0f, 1.0f, 0.0f).dot(v1.cross(v2)) < 0) this->m_SkeletonAngle = -this->m_SkeletonAngle;
         *(this->m_pSkeletonAngles + this->m_AngleID) = std::floorf(this->m_SkeletonAngle);
         this->m_AngleID = (this->m_AngleID++) % MAX_ANGLES_HISOTRY;
 
@@ -228,7 +224,7 @@ OGLVector4f *CKinect::getSkeletonColor(void)
 
 int *CKinect::getImage(void)
 {
-	return(this->m_pImage);
+    return(this->m_pImage);
 }
 
 float *CKinect::getAngle(void)
@@ -236,7 +232,7 @@ float *CKinect::getAngle(void)
     return(&this->m_SkeletonAngle);
 }
 
-bool CKinect::GetState()
+bool CKinect::GetState(void)
 {
     return(this->m_pNuiSensor->NuiStatus() == S_OK);
 }

@@ -9,38 +9,35 @@
 
 class OGLMouseInput
 {
-	private:
-		int mScreenCenterX;
-		int mScreenCenterY;
+    private:
+        int mScreenCenterX;
+        int mScreenCenterY;
 
-		int mCurrentX;
-		int mCurrentY;
+        int mCurrentX;
+        int mCurrentY;
 
         int mLastX;
         int mLastY;
 
-		float mYaw;
-		float mPitch;
-		float mAngle;
+        float mYaw;
+        float mPitch;
+        float mAngle;
 
-		bool mLeftButton;
-		bool mRightButton;
+        bool mLeftButton;
+        bool mRightButton;
 
         HWND mScreenHandle;
 
-	public:
-        OGLMouseInput	(int, int, HWND &);
-		~OGLMouseInput	();
+    public:
+        OGLMouseInput           (int, int, HWND &);
+        ~OGLMouseInput          (void);
 
-		void	update		(void);
-		
-		float	getAngle	(void);
-		float	getPitch	(void);
-		float	getYaw		(void);
+        void    update          (void);
+        
+        float    getAngle       (void);
+        float    getPitch       (void);
+        float    getYaw         (void);
 
-		bool	isLeftPress	(void);
-		bool	isRightPress(void);
-
-		int 	getX		(void);
-		int 	getY 		(void);
+        int     getX            (void);
+        int     getY            (void);
 };

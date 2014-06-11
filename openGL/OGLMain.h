@@ -42,8 +42,8 @@ class OGLMain
         float mPitch;
 
     public:
-        OGLMain             (const HWND &);
-        ~OGLMain            (void);
+        OGLMain            (const HWND &);
+        ~OGLMain           (void);
 
         void render        (void);
         void update        (void);

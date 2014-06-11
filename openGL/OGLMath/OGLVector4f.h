@@ -20,6 +20,7 @@ class OGLVector4f
 
         OGLVector4f        operator *   (float);
         OGLVector4f        operator /   (float);
+
         float              length       (void);
         float              dot          (const OGLVector4f &);
 

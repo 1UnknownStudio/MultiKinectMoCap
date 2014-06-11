@@ -9,15 +9,15 @@ typedef std::map<std::string, std::map<int, bool> > IntKeysMap;
 
 class OGLKeyboardInput
 {
-	private:
-		IntKeysMap	intKeys;
+    private:
+        IntKeysMap    intKeys;
 
-	public:
-		OGLKeyboardInput				();
-		~OGLKeyboardInput				();
+    public:
+        OGLKeyboardInput   (void);
+        ~OGLKeyboardInput  (void);
 
-		void			update			();
-		void			addKey			(const std::string &, unsigned int);
+        void  update       (void);
+        void  addKey       (const std::string &, unsigned int);
 
-		bool 			isKeyPressed	(const std::string &);
+        bool  isKeyPressed (const std::string &);
 };

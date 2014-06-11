@@ -3,14 +3,14 @@
 
 OGLTimer::OGLTimer(unsigned int fpsControl)
 {
-	QueryPerformanceCounter(&this->m_lastTime);
+    QueryPerformanceCounter(&this->m_lastTime);
     QueryPerformanceFrequency(&this->m_timeFreq);
 
-    this->m_fpsLimit	= fpsControl;
+    this->m_fpsLimit    = fpsControl;
     this->m_speedFactor = 1.0;
-	
-	this->m_actualTime.QuadPart = 0L;
-	this->m_timeFreq.QuadPart = 0L;
+    
+    this->m_actualTime.QuadPart = 0L;
+    this->m_timeFreq.QuadPart = 0L;
 
     this->m_framesCount = 0;
     this->m_totalFrameTime = 0;
@@ -26,13 +26,13 @@ void OGLTimer::updateTimer(void)
     QueryPerformanceCounter(&this->m_actualTime);
     QueryPerformanceFrequency(&this->m_timeFreq);
 
-	this->m_frameTime = (double) (this->m_actualTime.QuadPart - this->m_lastTime.QuadPart) / (double) this->m_timeFreq.QuadPart;
+    this->m_frameTime = (double) (this->m_actualTime.QuadPart - this->m_lastTime.QuadPart) / (double) this->m_timeFreq.QuadPart;
     this->m_gameTime =  (double) this->m_actualTime.QuadPart / (double) this->m_timeFreq.QuadPart;
 
     this->m_speedFactor = this->m_fpsLimit / (1.0 / this->m_frameTime);
     if(this->m_speedFactor <= 0.0) this->m_speedFactor = 1.0;
 
-	this->m_lastTime  = this->m_actualTime;
+    this->m_lastTime  = this->m_actualTime;
 }
 
 void OGLTimer::updateFps(void)
